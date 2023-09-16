@@ -4,10 +4,13 @@ project(CMakeSFMLProject LANGUAGES CXX)
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 
 include(FetchContent)
+# загружает исходные коды зависимых библиотек и подключает их к проекту
 FetchContent_Declare(SFML
     GIT_REPOSITORY https://github.com/SFML/SFML.git
-    GIT_TAG 2.6.x)
-FetchContent_MakeAvailable(SFML)
+    GIT_TAG 2.6.x)#команда делает зависимым проект от текущего репозитория
+
+FetchContent_MakeAvailable(SFML)# команда загружает исходный код
+# загружают библиотеку SFML из Git(в данном случае, версия 2.6.x)
 
 add_executable(CMakeSFMLProject src/main.cpp)
 target_link_libraries(CMakeSFMLProject PRIVATE sfml-graphics)
@@ -20,5 +23,5 @@ if(WIN32)
         PRE_BUILD COMMAND ${CMAKE_COMMAND} -E copy ${SFML_SOURCE_DIR}/extlibs/bin/$<IF:$<BOOL:${ARCH_64BITS}>,x64,x86>/openal32.dll $<TARGET_FILE_DIR:CMakeSFMLProject>
         VERBATIM)
 endif()
-
+# проверяет, работает ли сборка под Windows. Если да, то добавляется пользовательская команда для копирования файла openal32.dll из директории с зависимостями SFML в каталог.
 install(TARGETS CMakeSFMLProject)
